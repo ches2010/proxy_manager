@@ -1,0 +1,42 @@
+{
+    "general": {
+        "validation_threads": 100,
+        "failure_threshold": 3,
+        "auto_retest_enabled": true,
+        "auto_retest_interval": 5,
+        "log_level": "INFO"
+    },
+    "server": {
+        "http": {
+            "host": "0.0.0.0",
+            "port": 8080
+        },
+        "socks5": {
+            "host": "0.0.0.0",
+            "port": 1080
+        },
+        "rotate_per_request": false
+    },
+    "web_ui": {
+        "host": "0.0.0.0",
+        "port": 5000,
+        "username": "admin",
+        "password": "password"  // 建议使用环境变量存储
+    },
+    "auto_fetch": {
+        "enabled": true,
+        "interval_minutes": 60,
+        "fofa": {
+            "enabled": false,
+            "key": "",
+            "query": "protocol==\"socks5\" && country==\"CN\" && banner=\"Method:No\"",
+            "size": 500
+        },
+        "hunter": {
+            "enabled": false,
+            "key": "",
+            "query": "protocol==\"socks5\"&&protocol.banner=\"No authentication\"&&ip.country=\"CN\"",
+            "size": 50
+        }
+    }
+}
