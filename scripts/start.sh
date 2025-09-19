@@ -35,7 +35,11 @@ fi
 
 # 获取服务器IP地址
 # 尝试多种方式获取公网IP
-SERVER_IP=$(curl -s http://icanhazip.com || curl -s http://ifconfig.me || hostname -I | awk '{print $1}')
+PUBLIC_IP=$(curl -s http://icanhazip.com || curl -s http://ifconfig.me)
+# 获取本地IP
+LOCAL_IP=$(hostname -I | awk '{print $1}')
+# 本地回环地址
+LOOPBACK_IP="127.0.0.1"
 
 # 检查并激活虚拟环境
 if [ -z "$VIRTUAL_ENV" ] && [ -d "$VENV_DIR" ]; then
@@ -55,10 +59,22 @@ echo ""
 echo "=========================================="
 echo "Web 管理界面访问地址:"
 
-# 如果配置为0.0.0.0，则显示服务器IP
-if [ "$WEB_HOST" = "0.0.0.0" ] || [ "$WEB_HOST" = "localhost" ]; then
-    echo "  http://$SERVER_IP:$WEB_PORT"
-else
-    echo "  http://$WEB_HOST:$WEB_PORT"
+# 显示本地访问地址（服务器内部访问）
+echo "  本地访问 (服务器内部):"
+echo "    http://$LOOPBACK_IP:$WEB_PORT"
+if [ "$LOCAL_IP" != "$LOOPBACK_IP" ]; then
+    echo "    http://$LOCAL_IP:$WEB_PORT"
+fi
+
+# 显示远程访问地址（外部网络访问）
+if [ -n "$PUBLIC_IP" ] && [ "$PUBLIC_IP" != "$LOCAL_IP" ]; then
+    echo "  远程访问 (外部网络):"
+    echo "    http://$PUBLIC_IP:$WEB_PORT"
+fi
+
+# 显示基于配置的原始地址
+if [ "$WEB_HOST" != "0.0.0.0" ] && [ "$WEB_HOST" != "localhost" ]; then
+    echo "  配置地址:"
+    echo "    http://$WEB_HOST:$WEB_PORT"
 fi
 echo "=========================================="
