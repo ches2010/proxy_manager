@@ -1,0 +1,13 @@
+[Unit]
+Description=Proxy Manager Service
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/path/to/proxy_manager
+ExecStart=/path/to/proxy_manager/venv/bin/python app/main.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
